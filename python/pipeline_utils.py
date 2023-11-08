@@ -18,9 +18,9 @@ from scipy.io import loadmat
 from colour_demosaicing import demosaicing_CFA_Bayer_Menon2007
 import struct
 
-from .dng_opcode import parse_opcode_lists
-from .exif_data_formats import exif_formats
-from .exif_utils import parse_exif_tag, parse_exif, get_tag_values_from_ifds
+from dng_opcode import parse_opcode_lists
+from exif_data_formats import exif_formats
+from exif_utils import parse_exif_tag, parse_exif, get_tag_values_from_ifds
 
 
 def get_visible_raw_image(image_path):
@@ -54,6 +54,16 @@ def get_metadata(image_path):
     metadata['color_matrix_2'] = color_matrix_2
     metadata['orientation'] = get_orientation(tags, ifds)
     metadata['noise_profile'] = get_noise_profile(tags, ifds)
+    
+    print('linearization_table : {}'.format(metadata['linearization_table']))
+    print('black_level : {}'.format(metadata['black_level']))
+    print('white_label : {}'.format(metadata['white_level']))
+    print('cfa_pattern : {}'.format(metadata['cfa_pattern']))
+    print('as_shot_neutral : {}'.format(metadata['as_shot_neutral']))
+    print('color_matrix_1 : {}'.format(metadata['color_matrix_1']))
+    print('color_matrix_2 : {}'.format(metadata['color_matrix_2']))
+    print('orientation : {}'.format(metadata['orientation']))
+    print('noise_profile : {}'.format(metadata['noise_profile']))
     # ...
 
     # opcode lists
@@ -166,6 +176,8 @@ def normalize(raw_image, black_level, white_level):
         step2 = 2
         for i, idx in enumerate(idx2by2):
             black_level_mask[idx[0]::step2, idx[1]::step2] = black_level[i]
+    print('raw image type : {}'.format(type(raw_image)))
+    print('black_level_mask type : {}'.format(type(black_level_mask)))
     normalized_image = raw_image.astype(np.float32) - black_level_mask
     # if some values were smaller than black level
     normalized_image[normalized_image < 0] = 0

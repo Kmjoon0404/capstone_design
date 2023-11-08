@@ -1,0 +1,39 @@
+---
+model:
+  base filters: 32
+  channels: 3
+train:
+  noise level: 50
+  patch size: 128
+  batch size: 32
+  learning rate: 1.e-4
+  weight decay: 1.e-5
+  scheduler gamma: 0.5
+  scheduler step: 3
+  epochs: 21
+  dataset splits: 10
+  device: cuda
+  multi gpu: true
+  workers: 10
+  train_gt dataset path: 'Datasets/train_gt'
+  train_n dataset path: 'Datasets/train_n'
+  checkpoint path: 'Checkpoints'
+val:
+  noise levels:
+    - 10
+    - 30
+    - 50
+  patch size: 256
+  batch size: 8
+  frequency: 1
+  workers: 24
+  valid_gt dataset path: 'Datasets/valid_gt'
+  valid_n dataset path: 'Datasets/valid_n'
+test:
+  device: cuda:0
+  padding: true
+  dataset path: 'Datasets/Test'
+  results path: 'result'
+  pretrained models path: 'Pretrained'
+  save images: true
+...
